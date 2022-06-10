@@ -1,99 +1,95 @@
 // ** MUI Imports
-import Grid from '@mui/material/Grid'
-
-// ** Icons Imports
-import Poll from 'mdi-material-ui/Poll'
-import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
-import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
-import BriefcaseVariantOutline from 'mdi-material-ui/BriefcaseVariantOutline'
-
-// ** Custom Components Imports
-import CardStatisticsVerticalComponent from 'src/@core/components/card-statistics/card-stats-vertical'
+import * as React from 'react';
+import { Grid, TextField, Card, CardContent, FormControl, InputLabel, Select, MenuItem, Button, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material'
 
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
-// ** Demo Components Imports
-import Table from 'src/views/dashboard/Table'
-import Trophy from 'src/views/dashboard/Trophy'
-import TotalEarning from 'src/views/dashboard/TotalEarning'
-import StatisticsCard from 'src/views/dashboard/StatisticsCard'
-import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
-import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
-import SalesByCountries from 'src/views/dashboard/SalesByCountries'
 
+function createData(id, address, amount) {
+  return { id, address, amount };
+}
 const Dashboard = () => {
+  const [type, setType] = React.useState('');
+
+  const handleChange = (event) => {
+    setType(event.target.value);
+  };
+
+  const approveBtn = (
+    <Button variant='outlined'>Approve</Button>
+  )
+
+  const rows = [
+    createData(1, "0x0112112124431232423232321213231564AF2dadd12", approveBtn),
+    createData(2, "0x0112112124431232423232321213231564AF2dadd12", approveBtn),
+    createData(3, "0x0112112124431232423232321213231564AF2dadd12", approveBtn),
+    createData(4, "0x0112112124431232423232321213231564AF2dadd12", approveBtn),
+    createData(5, "0x0112112124431232423232321213231564AF2dadd12", approveBtn),
+  ];
+
   return (
     <ApexChartWrapper>
-      <Grid container spacing={6}>
-        <Grid item xs={12} md={4}>
-          <Trophy />
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <StatisticsCard />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <WeeklyOverview />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <TotalEarning />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
+      <Card sx={{ position: 'relative' }}>
+        <CardContent>
           <Grid container spacing={6}>
-            <Grid item xs={6}>
-              <CardStatisticsVerticalComponent
-                stats='$25.6k'
-                icon={<Poll />}
-                color='success'
-                trendNumber='+42%'
-                title='Total Profit'
-                subtitle='Weekly Profit'
-              />
+            <Grid item sm={12} md={2} alignItems="center" justifyContent="center">
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Select Type</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={type}
+                  label="Select Type"
+                  onChange={handleChange}
+                >
+                  <MenuItem value={10}>Mogul</MenuItem>
+                  <MenuItem value={20}>Investor</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
-            <Grid item xs={6}>
-              <CardStatisticsVerticalComponent
-                stats='$78'
-                title='Refunds'
-                trend='negative'
-                color='secondary'
-                trendNumber='-15%'
-                subtitle='Past Month'
-                icon={<CurrencyUsd />}
-              />
+            <Grid item sm={12} md={2} alignItems="center" justifyContent="center">
+              <TextField fullWidth label='Amount' placeholder='Amount' />
             </Grid>
-            <Grid item xs={6}>
-              <CardStatisticsVerticalComponent
-                stats='862'
-                trend='negative'
-                trendNumber='-18%'
-                title='New Project'
-                subtitle='Yearly Project'
-                icon={<BriefcaseVariantOutline />}
-              />
+
+            <Grid item sm={12} md={6} alignItems="center" justifyContent="center">
+              <TextField fullWidth label='Address To' placeholder='Address' />
             </Grid>
-            <Grid item xs={6}>
-              <CardStatisticsVerticalComponent
-                stats='15'
-                color='warning'
-                trend='negative'
-                trendNumber='-18%'
-                subtitle='Last Week'
-                title='Sales Queries'
-                icon={<HelpCircleOutline />}
-              />
+
+            <Grid item sm={12} md={2} sx={{ display: 'flex' }} alignItems="center" justifyContent="center">
+              <Button variant='contained'>
+                Send
+              </Button>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <SalesByCountries />
-        </Grid>
-        <Grid item xs={12} md={12} lg={8}>
-          <DepositWithdraw />
-        </Grid>
-        <Grid item xs={12}>
-          <Table />
-        </Grid>
-      </Grid>
+        </CardContent>
+      </Card>
+
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell algin="left" sx={{ width: "10%" }}>#</TableCell>
+              <TableCell align="left">To</TableCell>
+              <TableCell align="left" sx={{ width: "15%"}}>Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell align="left" component="th" scope="row">
+                  {row.id}
+                </TableCell>
+                <TableCell align="left">{row.address}</TableCell>
+                <TableCell align="left">{row.amount}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </ApexChartWrapper>
   )
 }
